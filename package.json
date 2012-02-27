@@ -6,6 +6,20 @@
         "vows": "*"
     },
     
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://www.opensource.org/licenses/MIT" 
+        }
+    ],
+
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/victorenator/http-link.git" 
+        }
+    ],
+    
     "main": "main.js",
     
     "scripts": {
