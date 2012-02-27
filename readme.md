@@ -8,6 +8,6 @@ synopsis
 --------
 
 ``` js
-var httpLink = require('http');
+var httpLink = require('http-link');
 var links = httpLink.parse('<http://example.com/acb>; rel=alternate; type=text/html');
 ```
