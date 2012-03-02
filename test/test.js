@@ -81,14 +81,14 @@ vows.describe('HTTP Links Parser')
     'when parse a link terminated by semicolon': {
         topic: parse('<http://example.com/TheBook/chapter2>; rel="previous";'),
         'throw error': function(error) {
-            assert.ifError();
+            assert.instanceOf(error, Error);
         }
     },
     
     'when parse an incorrect link': {
         topic: parse('<http://example.com/TheBook/chapter2'),
         'throw error': function(error) {
-            assert.ifError();
+            assert.instanceOf(error, Error);
         }
     }
     

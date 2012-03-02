@@ -66,11 +66,28 @@ function readLinkParam(value, pos, link) {
         throw new Error('Unexpected token: ' + pos);
 
     pos++;
-    var isQuotedString = value.charAt(pos) === '"';
-    var pvalue = isQuotedString? readQuotedString(value, pos): readToken(value, pos);
-    pos += pvalue.length;
     
-    link[pname] = isQuotedString? decodeQuotedString(pvalue): pvalue;
+    var isQuotedString = value.charAt(pos) === '"';
+    var pvalue;
+    if (isQuotedString) {
+        pvalue = readQuotedString(value, pos);
+        pos += pvalue.length;
+        pvalue = decodeQuotedString(pvalue);
+        
+    } else {
+        pvalue = readToken(value, pos);
+        pos += pvalue.length;
+        
+        if (pname == 'type') {
+            if (value.charAt(pos) !== '/')
+                throw new Error('Unexpected token: ' + pos);
+            pos++;
+            var subtype = readToken(value, pos);
+            pos += subtype.length;
+            pvalue += '/' + subtype;
+        }
+    }
+    link[pname] = pvalue;
     
     return pos;
 }
@@ -107,6 +124,9 @@ httpLink.parse = function(value) {
         links.push(link);
         pos = skipSpaces(value, pos);
     }
+    
+    if (pos < value.length)
+        throw new Error('Unexpected token: ' + pos);
     
     return links;
 };
