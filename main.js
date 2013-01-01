@@ -1,4 +1,4 @@
-(function(httpLink) {
+(function() {
 
 const HT = '\t';
 const SP = ' ';
@@ -111,6 +111,14 @@ function readLink(value, pos, link) {
     return pos;
 }
 
+var httpLink = {};
+
+/**
+ * Parse the given string.
+ * @param {String} value string as defined in http://www.w3.org/wiki/LinkHeader
+ * @return {Array} array of link objects
+ * @example '<http://example.com/TheBook/chapter2>; rel="previous"' -> [{href: 'http://example.com/TheBook/chapter2', rel: 'previous'}]
+ */
 httpLink.parse = function(value) {
     var pos = 0;
     
@@ -131,4 +139,16 @@ httpLink.parse = function(value) {
     return links;
 };
 
-})(exports || (htmlLink = {}));
+if (typeof define === 'function' && define.amd) { // RequireJS AMD
+    define('http-link', [], function () {
+        return httpLink;
+    });
+    
+} else if (typeof module === 'object' && module.exports) { // NodeJS, CommonJS
+    module.exports = httpLink;
+
+} else { // browser <script>
+    this.httpLink = httpLink;
+}
+
+})();
