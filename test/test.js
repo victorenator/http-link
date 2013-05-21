@@ -11,6 +11,12 @@ function parse(str) {
     };
 }
 
+function stringify(array) {
+    return function() {
+        return parser.stringify(array)
+    }
+}
+
 vows.describe('HTTP Links Parser')
 .addBatch({
     'when parse a link': {
@@ -91,7 +97,55 @@ vows.describe('HTTP Links Parser')
             assert.instanceOf(error, Error);
         }
     }
-    
+
+})['export'](module);
+
+vows.describe('HTTP Links Stringifier')
+.addBatch({
+    'when stringify a link': {
+        topic: stringify([
+                {
+                    href: 'http://example.com/TheBook/chapter2'
+                }
+            ]),
+        'is correct': function(links) {
+            assert.isString(links);
+            assert.deepEqual(links, '<http://example.com/TheBook/chapter2>');
+        }
+    },
+    'when stringify a link with params': {
+        topic: stringify([
+                {
+                    href: 'http://example.com/TheBook/chapter2',
+                    rel: 'previous',
+                    title: 'previous chapter'
+                }
+            ]),
+        'is correct': function(links) {
+            assert.isString(links);
+            assert.deepEqual(links, '<http://example.com/TheBook/chapter2>; rel="previous"; title="previous chapter"');
+        }
+    },
+    'when stringify more links': {
+        topic: stringify([
+                {
+                    href: '/TheBook/chapter2',
+                    rel: 'previous',
+                    'title*': 'UTF-8\'de\'letztes%20Kapitel'
+                },
+                {
+                    href: '/TheBook/chapter4',
+                    rel: 'next',
+                    'title*': 'UTF-8\'de\'n%c3%a4chstes%20Kapitel'
+                }
+            ]),
+        'is correct': function(links) {
+            assert.isString(links);
+            assert.deepEqual(links, '</TheBook/chapter2>; rel="previous"; title*="UTF-8\'de\'letztes%20Kapitel", ' +
+                '</TheBook/chapter4>; rel="next"; title*="UTF-8\'de\'n%c3%a4chstes%20Kapitel"');
+        }
+    },
+
 })['export'](module);
 
 })();
