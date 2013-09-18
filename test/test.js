@@ -126,6 +126,19 @@ vows.describe('HTTP Links Stringifier')
             assert.deepEqual(links, '<http://example.com/TheBook/chapter2>; rel="previous"; title="previous chapter"');
         }
     },
+    'when strigify a link with quotes in params': {
+        topic: stringify([
+                {
+                    href: 'http://example.com/TheBook/chapter2',
+                    rel: 'previous',
+                    title: 'chapter "Two"'
+                }
+            ]),
+        'is correct': function(links) {
+            assert.isString(links);
+            assert.deepEqual(links, '<http://example.com/TheBook/chapter2>; rel="previous"; title="chapter \\"Two\\""');
+        }
+    },
     'when stringify more links': {
         topic: stringify([
                 {
@@ -144,7 +157,7 @@ vows.describe('HTTP Links Stringifier')
             assert.deepEqual(links, '</TheBook/chapter2>; rel="previous"; title*="UTF-8\'de\'letztes%20Kapitel", ' +
                 '</TheBook/chapter4>; rel="next"; title*="UTF-8\'de\'n%c3%a4chstes%20Kapitel"');
         }
-    },
+    }
 
 })['export'](module);
 

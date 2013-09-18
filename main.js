@@ -145,10 +145,10 @@ httpLink.stringify = function(array) {
         var attr = Object.keys(obj).filter(function(key) {
             return key !== 'href';
         }).map(function(key) {
-            return key + '="' + obj[key] + '"';
+            return key + '=' + JSON.stringify(obj[key]);
         });
 
-        return ['<' + obj.href  + '>'].concat(attr).join('; ');
+        return ['<' + obj.href + '>'].concat(attr).join('; ');
     }).join(', ');
 }
 
