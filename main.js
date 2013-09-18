@@ -139,6 +139,19 @@ httpLink.parse = function(value) {
     return links;
 };
 
+httpLink.stringify = function(array) {
+    return array.map(function(obj) {
+        var href = obj.href;
+        var attr = Object.keys(obj).filter(function(key) {
+            return key !== 'href';
+        }).map(function(key) {
+            return key + '="' + obj[key] + '"';
+        });
+
+        return ['<' + obj.href  + '>'].concat(attr).join('; ');
+    }).join(', ');
+}
+
 if (typeof define === 'function' && define.amd) { // RequireJS AMD
     define('http-link', [], function () {
         return httpLink;
